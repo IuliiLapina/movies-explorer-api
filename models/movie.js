@@ -56,11 +56,11 @@ const movieSchema = new mongoose.Schema({
       message: 'Неправильный формат ccылки',
     },
   },
-  owner: {
+  owner: { // _id пользователя, который сохранил фильм. Обязательное поле.
     type: ObjectId,
     required: true,
   },
-  movieId: {
+  movieId: { // id фильма, который содержится в ответе сервиса MoviesExplorer. Обязательное поле.
     type: ObjectId,
     required: true,
   },
@@ -74,4 +74,5 @@ const movieSchema = new mongoose.Schema({
   },
 });
 
-movieSchema.methods.toJSON = toJSON;
+// создаём и экспортируем модель
+module.exports = mongoose.model('movie', movieSchema);
