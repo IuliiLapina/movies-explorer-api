@@ -1,3 +1,4 @@
+const { celebrate, Joi } = require('celebrate');
 const router = require('express').Router();
 const userRouter = require('./users');
 const movieRouter = require('./movies');

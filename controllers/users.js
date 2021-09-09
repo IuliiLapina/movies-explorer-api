@@ -1,3 +1,6 @@
+const { NODE_ENV, JWT_SECRET } = process.env;
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const { ConflictingError } = require('../errors/conflicting-error');
 const { NotFoundError } = require('../errors/not-found-error');
@@ -7,19 +10,16 @@ const { BadRequestError } = require('../errors/bad-request-error');
 // Регистрация - создать нового пользователя
 module.exports.createUser = (req, res, next) => {
   const { email, password, name } = req.body;
-
   // Проверим, передали ли данные
   if (!email || !password || !name) {
     next(new BadRequestError('Все поля должны быть заполнены'));
   }
-
   // Проверим, существует ли уже такой пользователь
   User.findOne({ email })
     .then((user) => {
       if (user) {
         next(new ConflictingError('Такой пользователь уже существует'));
       }
-
       // захешируем пароль
       bcrypt.hash(password, 10)
         .then((hash) =>
@@ -107,7 +107,7 @@ module.exports.updateUser = (req, res, next) => {
         return (new ConflictingError('Пользователь с такой почтой уже существует'));
       }
       // обновим данные пользователя
-      User.findByIdAndUpdate(
+      return User.findByIdAndUpdate(
         userId,
         { email, name },
         { new: true, runValidators: true },
@@ -117,7 +117,7 @@ module.exports.updateUser = (req, res, next) => {
             next(new NotFoundError('Пользователь с данным id не найден'));
           }
           return res.send({ data: user });
-        })
+        });
     })
     .catch((err) => {
       if (err.name === 'ValidationError' || err.name === 'CastError') {

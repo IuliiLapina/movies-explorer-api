@@ -11,10 +11,33 @@ module.exports.getMovies = (req, res, next) => {
 };
 
 module.exports.createMovie = (req, res, next) => {
-  const { country, duration, year, description, image, trailer, thumbnail, nameRU, nameEN } = req.body;
+  const {
+    country,
+    duration,
+    year,
+    description,
+    image,
+    trailer,
+    thumbnail,
+    movieId,
+    nameRU,
+    nameEN,
+  } = req.body;
   const owner = ObjectId(req.user._id);
 
-  Movie.create({ country, duration, year, description, image, trailer, thumbnail, owner, movieId, nameRU, nameEN })
+  Movie.create({
+    country,
+    duration,
+    year,
+    description,
+    image,
+    trailer,
+    thumbnail,
+    owner,
+    movieId,
+    nameRU,
+    nameEN,
+  })
     .then((movie) => res.send(movie))
     .catch((err) => {
       if (err.name === 'ValidationError' || err.name === 'CastError') {
