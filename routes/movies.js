@@ -23,7 +23,7 @@ router.post('/', celebrate({
     trailer: Joi.string().required().min(2).pattern(/https?:\/\/(www\.)?[a-zA-Z\d\-.]{1,}\.[a-z]{1,6}([/a-z0-9\-._~:?#[\]@!$&'()*+,;=]*)/),
     thumbnail: Joi.string().required().min(2).pattern(/https?:\/\/(www\.)?[a-zA-Z\d\-.]{1,}\.[a-z]{1,6}([/a-z0-9\-._~:?#[\]@!$&'()*+,;=]*)/),
     // owner: Joi.string().required().min(2),
-    movieId: Joi.string().required().min(2),
+    movieId: Joi.string().required(),
     nameRU: Joi.string().required().min(2),
     nameEN: Joi.string().required().min(2),
   }),
