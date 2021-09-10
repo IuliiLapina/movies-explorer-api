@@ -1,7 +1,11 @@
+require('dotenv').config();
+
 const express = require('express');
+const cors = require('cors');
 const mongoose = require('mongoose');
 const helmet = require('helmet');
 const { errors } = require('celebrate');
+const bodyParser = require('body-parser');
 
 const router = require('./routes/index');
 const { requestLogger } = require('./middlewares/logger');
@@ -20,10 +24,31 @@ mongoose.connect('mongodb://localhost:27017/moviesdb', {
   useUnifiedTopology: true,
 });
 
+const corsOptions = {
+  origin: [
+    'https://mesto.iapina.nomoredomains.club',
+    'http://mesto.iapina.nomoredomains.club',
+    'https://backend.mesto.iapina.nomoredomains.club',
+    'http://backend.mesto.iapina.nomoredomains.club',
+    'http://178.154.246.154',
+  //  'http://localhost:3000',
+  ],
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 app.use(requestLogger); // логгер запросов
 app.use(limiter);
 app.use(helmet());
 app.use(express.json());
+app.use(bodyParser.json());
+
+app.get('/crash-test', () => {
+  setTimeout(() => {
+    throw new Error('Сервер сейчас упадёт');
+  }, 0);
+});
+
 app.use(router);
 app.use(errorLogger); // логгер ошибок
 app.use(errors()); // обработчик ошибок celebrate
