@@ -22,12 +22,12 @@ module.exports.createUser = (req, res, next) => {
       }
       // захешируем пароль
       bcrypt.hash(password, 10)
-        .then((hash) =>
+        .then((hash) => {
           // создадим документ на основе пришедших данных
           User.create({ email, password: hash, name })
             // вернём записанные в базу данные
-            .then((user) => {
-              res.status(201).send(user);
+            .then((u) => {
+              res.status(201).send(u);
             })
             // данные не записались, вернём ошибку
             .catch((err) => {
@@ -40,7 +40,8 @@ module.exports.createUser = (req, res, next) => {
                 next(err);
               }
             })
-            .catch((error) => next(error)));
+            .catch((error) => next(error));
+        });
     });
 };
 
