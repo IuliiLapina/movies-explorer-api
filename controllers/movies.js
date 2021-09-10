@@ -41,7 +41,7 @@ module.exports.createMovie = (req, res, next) => {
     .then((movie) => res.send(movie))
     .catch((err) => {
       if (err.name === 'ValidationError' || err.name === 'CastError') {
-        throw new BadRequestError('Переданы некорректные данные карточки');
+        throw new BadRequestError('Переданы некорректные данные');
       } else {
         next(err);
       }

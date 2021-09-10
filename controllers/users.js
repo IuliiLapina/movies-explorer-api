@@ -77,7 +77,7 @@ module.exports.login = (req, res, next) => {
 };
 
 // возвращает информацию о пользователе (email и имя)
-module.exports.getCurrentUser = (req, res, next) => {
+module.exports.getUser = (req, res, next) => {
   User.findById(req.user._id)
     .then((user) => {
       if (!user) {

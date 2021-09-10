@@ -6,6 +6,7 @@ const {
   deleteMovie,
 } = require('../controllers/movies');
 
+const patternURL = (/https?:\/\/(www\.)?[a-zA-Z\d\-.]{1,}\.[a-z]{1,6}([/a-z0-9\-._~:?#[\]@!$&'()*+,;=]*)/);
 // возвращает все сохранённые пользователем фильмы
 router.get('/', getMovies);
 
@@ -19,9 +20,9 @@ router.post('/', celebrate({
     duration: Joi.number().required().min(2),
     year: Joi.string().required(),
     description: Joi.string().required().min(2),
-    image: Joi.string().required().min(2).pattern(/https?:\/\/(www\.)?[a-zA-Z\d\-.]{1,}\.[a-z]{1,6}([/a-z0-9\-._~:?#[\]@!$&'()*+,;=]*)/),
-    trailer: Joi.string().required().min(2).pattern(/https?:\/\/(www\.)?[a-zA-Z\d\-.]{1,}\.[a-z]{1,6}([/a-z0-9\-._~:?#[\]@!$&'()*+,;=]*)/),
-    thumbnail: Joi.string().required().min(2).pattern(/https?:\/\/(www\.)?[a-zA-Z\d\-.]{1,}\.[a-z]{1,6}([/a-z0-9\-._~:?#[\]@!$&'()*+,;=]*)/),
+    image: Joi.string().required().min(2).pattern(patternURL),
+    trailer: Joi.string().required().min(2).pattern(patternURL),
+    thumbnail: Joi.string().required().min(2).pattern(patternURL),
     // owner: Joi.string().required().min(2),
     movieId: Joi.string().required(),
     nameRU: Joi.string().required().min(2),

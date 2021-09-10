@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const { celebrate, Joi } = require('celebrate');
-const { getUser, updateUser } = require('../controllers/users');
+const { getUser } = require('../controllers/users');
+const { updateUser } = require('../controllers/users');
 
 // возвращает информацию о пользователе (email и имя)
 router.get('/me', celebrate({
