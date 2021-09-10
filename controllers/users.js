@@ -83,7 +83,7 @@ module.exports.getUser = (req, res, next) => {
       if (!user) {
         next(new NotFoundError('Такой пользователь не найден'));
       }
-      return res.status(200).send({ data: user });
+      return res.status(200).send(user);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
@@ -94,42 +94,6 @@ module.exports.getUser = (req, res, next) => {
     })
     .catch((error) => next(error));
 };
-
-/*
-// обновляет информацию о пользователе (email и имя)
-module.exports.updateUser = (req, res, next) => {
-  const userId = req.user._id;
-  const { email, name } = req.body;
-  // проверим, существует ли уже пользователь с таким email
-  User.findOne({ email })
-    .then((user) => {
-      if (user._id !== userId) {
-        throw new ConflictingError('Пользователь с таким email уже существует');
-      }
-
-      // обновим данные пользователя
-      User.findByIdAndUpdate(
-        userId,
-        { email, name },
-        { new: true, runValidators: true },
-      )
-        .then((user) => {
-          if (!user) {
-            next(new NotFoundError('Пользователь с данным id не найден'));
-          }
-          return res.send(user);
-        });
-    })
-    .catch((err) => {
-      if (err.name === 'ValidationError' || err.name === 'CastError') {
-        throw new BadRequestError('Переданы некорректные данные пользователя');
-      } else {
-        next(err);
-      }
-    })
-    .catch((error) => next(error));
-};
-*/
 
 // обновляет информацию о пользователе (email и имя)
 module.exports.updateUser = (req, res, next) => {
