@@ -11,7 +11,6 @@ module.exports = {
 
 /*
 const { BadRequestError } = require('./errors/bad-request-error');
-
 app.use((err, req, res, next) => {
   const { statusCode = 500, message } = err;
   if (err.kind === 'ObjectId') {

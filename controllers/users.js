@@ -95,19 +95,20 @@ module.exports.getUser = (req, res, next) => {
     .catch((error) => next(error));
 };
 
+/*
 // обновляет информацию о пользователе (email и имя)
 module.exports.updateUser = (req, res, next) => {
   const userId = req.user._id;
   const { email, name } = req.body;
-
   // проверим, существует ли уже пользователь с таким email
-  User.findById(userId)
+  User.findOne({ email })
     .then((user) => {
-      if (user.email === req.body) {
-        return (new ConflictingError('Пользователь с такой почтой уже существует'));
+      if (user._id !== userId) {
+        throw new ConflictingError('Пользователь с таким email уже существует');
       }
+
       // обновим данные пользователя
-      return User.findByIdAndUpdate(
+      User.findByIdAndUpdate(
         userId,
         { email, name },
         { new: true, runValidators: true },
@@ -116,7 +117,7 @@ module.exports.updateUser = (req, res, next) => {
           if (!user) {
             next(new NotFoundError('Пользователь с данным id не найден'));
           }
-          return res.send({ data: user });
+          return res.send(user);
         });
     })
     .catch((err) => {
@@ -125,6 +126,36 @@ module.exports.updateUser = (req, res, next) => {
       } else {
         next(err);
       }
+    })
+    .catch((error) => next(error));
+};
+*/
+
+// обновляет информацию о пользователе (email и имя)
+module.exports.updateUser = (req, res, next) => {
+  const userId = req.user._id;
+  const { email, name } = req.body;
+
+  // обновим данные пользователя
+  User.findByIdAndUpdate(
+    userId,
+    { email, name },
+    { new: true, runValidators: true },
+  )
+    .then((user) => {
+      if (!user) {
+        next(new NotFoundError('Пользователь с данным id не найден'));
+      }
+      return res.status(200).send(user);
+    })
+    .catch((err) => {
+      if (err.name === 'ValidationError' || err.name === 'CastError') {
+        return next(new BadRequestError('Переданы некорректные данные пользователя'));
+      }
+      if (err.name === 'MongoError' && err.code === 11000) {
+        throw new ConflictingError('Пользователь с таким email уже существует');
+      }
+      return next(err);
     })
     .catch((error) => next(error));
 };

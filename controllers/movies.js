@@ -13,6 +13,7 @@ module.exports.getMovies = (req, res, next) => {
 module.exports.createMovie = (req, res, next) => {
   const {
     country,
+    director,
     duration,
     year,
     description,
@@ -27,6 +28,7 @@ module.exports.createMovie = (req, res, next) => {
 
   Movie.create({
     country,
+    director,
     duration,
     year,
     description,
@@ -41,7 +43,7 @@ module.exports.createMovie = (req, res, next) => {
     .then((movie) => res.send(movie))
     .catch((err) => {
       if (err.name === 'ValidationError' || err.name === 'CastError') {
-        throw new BadRequestError('Переданы некорректные данные');
+        throw new BadRequestError('Переданы некорректные данные111');
       } else {
         next(err);
       }
