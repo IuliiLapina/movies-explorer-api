@@ -10,11 +10,11 @@ const validateRegistration = celebrate({
         'string.required': 'Поле "email" должно быть заполнено',
       }),
     password: Joi.string().required().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$'))
-      .message({
+      .messages({
         'any.required': 'Поле "password" должно быть заполнено',
       }),
     name: Joi.string().min(2).max(30)
-      .message({
+      .messages({
         'any.required': 'Поле "name" должно быть заполнено',
       }),
   }),
@@ -28,7 +28,7 @@ const validateAuthentication = celebrate({
         'string.required': 'Поле "email" должно быть заполнено',
       }),
     password: Joi.string().required().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$'))
-      .message({
+      .messages({
         'any.required': 'Поле "password" должно быть заполнено',
       }),
   }),
@@ -37,44 +37,44 @@ const validateAuthentication = celebrate({
 const validateCreateMovie = celebrate({
   body: Joi.object().keys({
     country: Joi.string().required().min(2)
-      .message({
+      .messages({
         'any.required': 'Поле "country" должно быть заполнено',
       }),
     director: Joi.string().required().min(2)
-      .message({
+      .messages({
         'any.required': 'Поле "director" должно быть заполнено',
       }),
     duration: Joi.number().required().min(2)
-      .message({
+      .messages({
         'any.required': 'Поле "duration" должно быть заполнено',
       }),
     year: Joi.string().required()
-      .message({
+      .messages({
         'any.required': 'Поле "year" должно быть заполнено',
       }),
     description: Joi.string().required().min(2)
-      .message({
+      .messages({
         'any.required': 'Поле "description" должно быть заполнено',
       }),
     image: Joi.string().required().min(2).pattern(patternURL)
-      .message({
+      .messages({
         'any.required': 'Поле "image" должно быть заполнено',
       }),
     trailer: Joi.string().required().min(2).pattern(patternURL)
-      .message({
+      .messages({
         'any.required': 'Поле "trailer" должно быть заполнено',
       }),
     thumbnail: Joi.string().required().min(2).pattern(patternURL)
-      .message({
+      .messages({
         'any.required': 'Поле "thumbnail" должно быть заполнено',
       }),
     movieId: Joi.string().required(),
     nameRU: Joi.string().required().min(2)
-      .message({
+      .messages({
         'any.required': 'Поле "nameRU" должно быть заполнено',
       }),
     nameEN: Joi.string().required().min(2)
-      .message({
+      .messages({
         'any.required': 'Поле "nameEN" должно быть заполнено',
       }),
   }),
@@ -100,7 +100,7 @@ const validateUpdateUser = celebrate({
         'string.required': 'Поле "email" должно быть заполнено',
       }),
     name: Joi.string().required().min(2).max(30)
-      .message({
+      .messages({
         'any.required': 'Поле "name" должно быть заполнено',
       }),
   }),

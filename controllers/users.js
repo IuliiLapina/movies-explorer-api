@@ -1,6 +1,6 @@
-const { NODE_ENV, JWT_SECRET } = process.env;
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const { JWT_SECRET } = require('../config');
 const User = require('../models/user');
 const { ConflictingError } = require('../errors/conflicting-error');
 const { NotFoundError } = require('../errors/not-found-error');
@@ -10,10 +10,6 @@ const { BadRequestError } = require('../errors/bad-request-error');
 // Регистрация - создать нового пользователя
 module.exports.createUser = (req, res, next) => {
   const { email, password, name } = req.body;
-  // Проверим, передали ли данные
-  if (!email || !password || !name) {
-    next(new BadRequestError('Все поля должны быть заполнены'));
-  }
   // Проверим, существует ли уже такой пользователь
   User.findOne({ email })
     .then((user) => {
@@ -48,17 +44,12 @@ module.exports.createUser = (req, res, next) => {
 // Аутентификация
 module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
-  // Проверим, передали ли данные
-  if (!email || !password) {
-    throw new BadRequestError('Email или пароль не заполнены');
-  }
   return User.findUserByCredentials(email, password)
     .then((user) => {
       // аутентификация успешна! пользователь в переменной user
       const token = jwt.sign(
         { _id: user._id },
-        NODE_ENV === 'production' ? JWT_SECRET
-          : 'some-secret-key',
+        JWT_SECRET,
         { expiresIn: '7d' },
       );
 

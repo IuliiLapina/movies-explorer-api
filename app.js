@@ -1,5 +1,3 @@
-require('dotenv').config();
-
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
@@ -12,12 +10,13 @@ const { requestLogger } = require('./middlewares/logger');
 const { errorLogger } = require('./middlewares/logger');
 const { errorHandler } = require('./middlewares/error-handler');
 const { limiter } = require('./middlewares/rate-limit');
+const { MONGO_URL } = require('./config');
 
 const { PORT = 3000 } = process.env;
 const app = express();
 
 // подключаемся к серверу mongo
-mongoose.connect('mongodb://localhost:27017/moviesdb', {
+mongoose.connect(MONGO_URL, {
   useNewUrlParser: true,
   useCreateIndex: true,
   useFindAndModify: false,
@@ -26,12 +25,10 @@ mongoose.connect('mongodb://localhost:27017/moviesdb', {
 
 const corsOptions = {
   origin: [
-    'https://mesto.iapina.nomoredomains.club',
-    'http://mesto.iapina.nomoredomains.club',
-    'https://backend.mesto.iapina.nomoredomains.club',
-    'http://backend.mesto.iapina.nomoredomains.club',
-    'http://178.154.246.154',
-  //  'http://localhost:3000',
+    'https://api.best-movies-explorer.nomoredomains.club',
+    'http://api.best-movies-explorer.nomoredomains.club',
+    'http://62.84.112.11',
+    'http://localhost:3000',
   ],
   credentials: true,
 };
