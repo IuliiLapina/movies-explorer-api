@@ -43,7 +43,7 @@ module.exports.createMovie = (req, res, next) => {
     .then((movie) => res.send(movie))
     .catch((err) => {
       if (err.name === 'ValidationError' || err.name === 'CastError') {
-        throw new BadRequestError('Переданы некорректные данные111');
+        throw new BadRequestError('Переданы некорректные данные');
       } else {
         next(err);
       }
@@ -55,20 +55,18 @@ module.exports.deleteMovie = (req, res, next) => {
   Movie.findById(req.params.movieId)
     .then((movie) => {
       if (!movie) {
-        next(new NotFoundError('Карточка с таким id не найдена'));
+        next(new NotFoundError('Фильм с таким id не найден'));
       }
 
       if (movie.owner.toString() === req.user._id) {
-        return Movie.findByIdAndRemove(req.params.movieId)
-          .then((s) => {
-            res.send(s);
-          });
+        return movie.remove()
+          .then((s) => res.status(200).send(s));
       }
       return next(new ForbiddenError('Недостаточно прав для действия'));
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        throw new BadRequestError('Переданы некорректные данные карточки');
+        throw new BadRequestError('Переданы некорректные данные фильма');
       } else {
         next(err);
       }

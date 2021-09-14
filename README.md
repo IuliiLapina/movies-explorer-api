@@ -1,5 +1,6 @@
 # movies-explorer-api
 
-## Запуск проекта
-`npm run start` — запускает сервер   
-`npm run dev` — запускает сервер с hot-reload
+# Ссылка на сайт, размещенный на Яндекс.Облаке.
+
+backend - https://api.best-movies-explorer.nomoredomains.club
+Публичный IP 62.84.112.11
