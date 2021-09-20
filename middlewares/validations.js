@@ -1,6 +1,6 @@
-const { celebrate, Joi } = require('celebrate');
-
-const patternURL = (/https?:\/\/(www\.)?[a-zA-Z\d\-.]{1,}\.[a-z]{1,6}([/a-z0-9\-._~:?#[\]@!$&'()*+,;=]*)/);
+const { celebrate } = require('celebrate');
+const Joi = require('joi');
+const validator = require('validator');
 
 const validateRegistration = celebrate({
   body: Joi.object().keys({
@@ -9,11 +9,11 @@ const validateRegistration = celebrate({
       .messages({
         'string.required': 'Поле "email" должно быть заполнено',
       }),
-    password: Joi.string().required().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$'))
+    password: Joi.string().required()
       .messages({
         'any.required': 'Поле "password" должно быть заполнено',
       }),
-    name: Joi.string().min(2).max(30)
+    name: Joi.string().required().min(2).max(30)
       .messages({
         'any.required': 'Поле "name" должно быть заполнено',
       }),
@@ -27,7 +27,7 @@ const validateAuthentication = celebrate({
       .messages({
         'string.required': 'Поле "email" должно быть заполнено',
       }),
-    password: Joi.string().required().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$'))
+    password: Joi.string().required()
       .messages({
         'any.required': 'Поле "password" должно быть заполнено',
       }),
@@ -56,19 +56,34 @@ const validateCreateMovie = celebrate({
       .messages({
         'any.required': 'Поле "description" должно быть заполнено',
       }),
-    image: Joi.string().required().min(2).pattern(patternURL)
+    image: Joi.string().required().min(2).custom((value, helpers) => {
+      if (validator.isURL(value)) {
+        return value;
+      }
+      return helpers.message('Поле "image" должно быть валидным url-адресом');
+    })
       .messages({
         'any.required': 'Поле "image" должно быть заполнено',
       }),
-    trailer: Joi.string().required().min(2).pattern(patternURL)
+    trailer: Joi.string().required().min(2).custom((value, helpers) => {
+      if (validator.isURL(value)) {
+        return value;
+      }
+      return helpers.message('Поле "trailer" должно быть валидным url-адресом');
+    })
       .messages({
         'any.required': 'Поле "trailer" должно быть заполнено',
       }),
-    thumbnail: Joi.string().required().min(2).pattern(patternURL)
+    thumbnail: Joi.string().required().min(2).custom((value, helpers) => {
+      if (validator.isURL(value)) {
+        return value;
+      }
+      return helpers.message('Поле "thumbnail" должно быть валидным url-адресом');
+    })
       .messages({
         'any.required': 'Поле "thumbnail" должно быть заполнено',
       }),
-    movieId: Joi.string().required(),
+    movieId: Joi.number().required(),
     nameRU: Joi.string().required().min(2)
       .messages({
         'any.required': 'Поле "nameRU" должно быть заполнено',

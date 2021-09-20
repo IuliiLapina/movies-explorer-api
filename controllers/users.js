@@ -66,7 +66,7 @@ module.exports.login = (req, res, next) => {
       */
       return res.send({ token });
     })
-    .catch(() => next(new UnauthorizedError('Произошла ошибка авторизации')));
+    .catch(() => next(new UnauthorizedError('Неправильная почта или пароль')));
 };
 
 // возвращает информацию о пользователе (email и имя)
@@ -74,7 +74,7 @@ module.exports.getUser = (req, res, next) => {
   User.findById(req.user._id)
     .then((user) => {
       if (!user) {
-        next(new NotFoundError('Такой пользователь не найден'));
+        return next(new NotFoundError('Такой пользователь не найден'));
       }
       return res.status(200).send(user);
     })
@@ -101,7 +101,7 @@ module.exports.updateUser = (req, res, next) => {
   )
     .then((user) => {
       if (!user) {
-        next(new NotFoundError('Пользователь с данным id не найден'));
+        return next(new NotFoundError('Пользователь с данным id не найден'));
       }
       return res.status(200).send(user);
     })
