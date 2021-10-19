@@ -29,6 +29,8 @@ const corsOptions = {
   origin: [
     'https://api.best-movies-explorer.nomoredomains.club',
     'http://api.best-movies-explorer.nomoredomains.club',
+    'https://best-movies-explorer.nomoredomains.club',
+    'http://best-movies-explorer.nomoredomains.club',
     'http://178.154.224.218',
     'http://localhost:3000',
   ],
