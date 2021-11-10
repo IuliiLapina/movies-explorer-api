@@ -12,7 +12,7 @@ const { requestLogger } = require('./middlewares/logger');
 const { errorLogger } = require('./middlewares/logger');
 const { errorHandler } = require('./middlewares/error-handler');
 const { limiter } = require('./middlewares/rate-limit');
-const { MONGO_URL } = require('./config');
+const { MONGO_URL } = require('./utils/config');
 
 const { PORT = 3000 } = process.env;
 const app = express();
