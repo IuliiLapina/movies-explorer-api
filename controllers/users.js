@@ -6,6 +6,7 @@ const { ConflictingError } = require('../errors/conflicting-error');
 const { NotFoundError } = require('../errors/not-found-error');
 const { UnauthorizedError } = require('../errors/unauthorized-error');
 const { BadRequestError } = require('../errors/bad-request-error');
+const MESSAGE = require('../utils/constants');
 
 // Регистрация - создать нового пользователя
 module.exports.createUser = (req, res, next) => {
@@ -14,7 +15,7 @@ module.exports.createUser = (req, res, next) => {
   User.findOne({ email })
     .then((user) => {
       if (user) {
-        next(new ConflictingError('Такой пользователь уже существует'));
+        next(new ConflictingError(MESSAGE.ConflictingUser));
       }
       // захешируем пароль
       bcrypt.hash(password, 10)
@@ -28,10 +29,10 @@ module.exports.createUser = (req, res, next) => {
             // данные не записались, вернём ошибку
             .catch((err) => {
               if (err.name === 'MongoError' && err.code === 11000) {
-                throw new ConflictingError('Пользователь с такой почтой уже существует');
+                throw new ConflictingError(MESSAGE.ConflictingUserEmail);
               }
               if (err.name === 'ValidationError' || err.name === 'CastError') {
-                throw new BadRequestError('Переданы некорректные данные пользователя');
+                throw new BadRequestError(MESSAGE.BadRequestUser);
               } else {
                 next(err);
               }
@@ -66,7 +67,7 @@ module.exports.login = (req, res, next) => {
       */
       return res.send({ token });
     })
-    .catch(() => next(new UnauthorizedError('Неправильная почта или пароль')));
+    .catch(() => next(new UnauthorizedError(MESSAGE.Unauthorized)));
 };
 
 // возвращает информацию о пользователе (email и имя)
@@ -74,13 +75,13 @@ module.exports.getUser = (req, res, next) => {
   User.findById(req.user._id)
     .then((user) => {
       if (!user) {
-        return next(new NotFoundError('Такой пользователь не найден'));
+        return next(new NotFoundError(MESSAGE.NotFoundUser));
       }
       return res.status(200).send(user);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        throw new BadRequestError('Переданы некорректные данные пользователя');
+        throw new BadRequestError(MESSAGE.BadRequestUser);
       } else {
         next(err);
       }
@@ -101,16 +102,16 @@ module.exports.updateUser = (req, res, next) => {
   )
     .then((user) => {
       if (!user) {
-        return next(new NotFoundError('Пользователь с данным id не найден'));
+        return next(new NotFoundError(MESSAGE.NotFoundUser));
       }
       return res.status(200).send(user);
     })
     .catch((err) => {
       if (err.name === 'ValidationError' || err.name === 'CastError') {
-        return next(new BadRequestError('Переданы некорректные данные пользователя'));
+        return next(new BadRequestError(MESSAGE.BadRequestUser));
       }
       if (err.name === 'MongoError' && err.code === 11000) {
-        throw new ConflictingError('Пользователь с таким email уже существует');
+        throw new ConflictingError(MESSAGE.ConflictingUserEmail);
       }
       return next(err);
     })

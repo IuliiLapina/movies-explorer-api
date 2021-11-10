@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 const { ObjectId } = require('mongodb');
+const MESSAGE = require('../utils/constants');
 
 const movieSchema = new mongoose.Schema({
   country: {
@@ -31,7 +32,7 @@ const movieSchema = new mongoose.Schema({
         return validator.isURL(v);
       },
       require_protocol: true,
-      message: 'Неправильный формат ccылки',
+      message: MESSAGE.NotCorrectUrl,
     },
   },
   trailer: {
@@ -42,7 +43,7 @@ const movieSchema = new mongoose.Schema({
         return validator.isURL(v);
       },
       require_protocol: true,
-      message: 'Неправильный формат ccылки',
+      message: MESSAGE.NotCorrectUrl,
     },
   },
   thumbnail: {
@@ -53,14 +54,14 @@ const movieSchema = new mongoose.Schema({
         return validator.isURL(v);
       },
       require_protocol: true,
-      message: 'Неправильный формат ccылки',
+      message: MESSAGE.NotCorrectUrl,
     },
   },
-  owner: { // _id пользователя, который сохранил фильм. Обязательное поле.
+  owner: { // _id пользователя, который сохранил фильм.
     type: ObjectId,
     required: true,
   },
-  movieId: { // id фильма, который содержится в ответе сервиса MoviesExplorer. Обязательное поле.
+  movieId: { // id фильма, который содержится в ответе сервиса MoviesExplorer.
     type: Number,
     required: true,
   },
@@ -74,5 +75,4 @@ const movieSchema = new mongoose.Schema({
   },
 });
 
-// создаём и экспортируем модель
 module.exports = mongoose.model('movie', movieSchema);
