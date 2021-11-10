@@ -39,7 +39,7 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 app.use(requestLogger); // логгер запросов
-//app.use(limiter);
+app.use(limiter);
 app.use(helmet());
 app.use(express.json());
 app.use(bodyParser.json());
@@ -51,6 +51,7 @@ app.get('/crash-test', () => {
   }, 0);
 });
 */
+
 app.use(router);
 app.use(errorLogger); // логгер ошибок
 app.use(errors()); // обработчик ошибок celebrate
